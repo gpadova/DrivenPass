@@ -1,6 +1,6 @@
-import { SignUp } from "@/protocols";
-import userResository from "@/Repositories/userRepository";
-import usersService from "@/Services/userService";
+import { SignUp } from "../protocols.js";
+import userResository from "../Repositories/userRepository.js";
+import usersService from "../Services/userService.js";
 import { Request, Response } from "express";
 import httpStatus from "http-status";
 

@@ -1,5 +1,5 @@
-import { prisma } from "@/Config/database";
-import { Wifi } from "@/protocols";
+import { prisma } from "../Config/database.js";
+import { Wifi } from "../protocols.js";
 import Cryptr from "cryptr";
 
 async function insertWifiQuery(wifi: Wifi, userId: number) {

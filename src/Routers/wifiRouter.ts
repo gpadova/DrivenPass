@@ -1,13 +1,13 @@
-import { authenticateToken } from "@/Middlewares/authenticationMiddleware";
-import { validateBody } from "@/Middlewares/validationMiddleware";
+import { authenticateToken } from "../Middlewares/authenticationMiddleware.js";
+import { validateBody } from "../Middlewares/validationMiddleware.js";
 import { Router } from "express";
-import { WifiSchema } from "@/Schemas/wifiSchema";
+import { WifiSchema } from "../Schemas/wifiSchema.js";
 import {
   inserWifiDb,
   getSpecificWifi,
   getWifi,
   deleteWifi
-} from "@/Controllers/wifiController";
+} from "../Controllers/wifiController.js";
 
 const wifiRouter = Router();
 

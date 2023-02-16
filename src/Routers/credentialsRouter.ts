@@ -1,13 +1,13 @@
-import { validateBody } from "@/Middlewares/validationMiddleware";
-import { credentialSchema } from "@/Schemas/credentialSchema";
+import { validateBody } from "../Middlewares/validationMiddleware.js";
+import { credentialSchema } from "../Schemas/credentialSchema.js";
 import { Router } from "express";
 import {
   inserCredentialDb,
   getSpecificCredential,
   getCredentials,
   deleteCredential,
-} from "@/Controllers/credentialController";
-import { authenticateToken } from "@/Middlewares/authenticationMiddleware";
+} from "../Controllers/credentialController.js";
+import { authenticateToken } from "../Middlewares/authenticationMiddleware.js";
 
 const credentialRouter = Router();
 

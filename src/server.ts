@@ -1,19 +1,25 @@
 import cors from "cors";
-import express from "express";
-import credentialRouter from "./Routers/credentialsRouter";
-import userRouter from "./Routers/usersRouter";
-import wifiRouter from "./Routers/wifiRouter";
+import express, { Express } from "express";
+import credentialRouter from "./Routers/credentialsRouter.js";
+import userRouter from "./Routers/usersRouter.js";
+import wifiRouter from "./Routers/wifiRouter.js";
+import { connectDb } from "./Config/database.js";
 
-const server = express()
+export const app = express()
 
-server
+app
     .use(cors())
     .use(express.json())
     .use(wifiRouter)
     .use(userRouter)
     .use(credentialRouter)
 
+export function init(): Promise<Express> {
+        connectDb();
+        return Promise.resolve(app);
+      }    
+
 const port = +process.env.PORT || 4000;
-server.listen(port, () =>{
-    console.log(`Server is running on PORT ${port}`)
+app.listen(port, () =>{
+    console.log(`app is running on PORT ${port}`)
 })

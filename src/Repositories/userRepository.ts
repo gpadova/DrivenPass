@@ -1,5 +1,5 @@
-import { prisma } from "@/Config/database";
-import { SignUp } from "@/protocols";
+import { prisma } from "../Config/database.js";
+import { SignUp } from "../protocols.js";
 import bcrypt from "bcrypt"
 
 async function verifyEmail(user:SignUp) {
@@ -20,14 +20,10 @@ async function insertUserDb(user: SignUp) {
     })
 }
 
-async function verifyIfPasswordIsRight(user: SignUp) {
-    const userExists
-}
 
 const userResository = {
     verifyEmail, 
-    insertUserDb,
-    verifyIfUserExists
+    insertUserDb
 };
 
 export default userResository;

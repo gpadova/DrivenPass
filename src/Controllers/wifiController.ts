@@ -1,8 +1,8 @@
 import { Response } from "express";
-import { AuthenticatedRequest } from "@/Middlewares/authenticationMiddleware";
+import { AuthenticatedRequest } from "../Middlewares/authenticationMiddleware.js";
 import httpStatus from "http-status";
-import { Wifi } from "@/protocols";
-import wifiService from "@/Services/wifiService";
+import { Wifi } from "../protocols.js";
+import wifiService from "../Services/wifiService.js";
 import Cryptr from "cryptr";
 
 export async function inserWifiDb(req: AuthenticatedRequest, res: Response) {

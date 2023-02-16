@@ -1,5 +1,5 @@
-import { prisma } from "@/Config/database";
-import { Credential } from "@/protocols";
+import { prisma } from "../Config/database.js";
+import { Credential } from "../protocols.js";
 import Cryptr from "cryptr";
 
 async function verifyExistingNameQuery(credential: Credential, userId: number) {

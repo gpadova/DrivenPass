@@ -1,7 +1,7 @@
-import { Wifi } from "@/protocols";
+import { Wifi } from "../protocols.js";
 import Cryptr from "cryptr";
-import wifiRepository from "@/Repositories/wifiRepository";
-import { invalidGetWifi } from "@/errors/invalidGetWifi";
+import wifiRepository from "../Repositories/wifiRepository.js";
+import { invalidGetWifi } from "../errors/invalidGetWifi.js";
 
 
 async function insertWifi(wifi:Wifi, userId: number) {

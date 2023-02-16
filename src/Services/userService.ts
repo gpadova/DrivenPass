@@ -1,7 +1,7 @@
-import { invalidDataError } from "@/errors/invalidDataError";
-import { invalidEmailError } from "@/errors/invalidEmail";
-import { SignUp } from "@/protocols";
-import userResository from "@/Repositories/userRepository";
+import { invalidDataError } from "../errors/invalidDataError.js";
+import { invalidEmailError } from "../errors/invalidEmail.js";
+import { SignUp } from "../protocols.js";
+import userResository from "../Repositories/userRepository.js";
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken";
 

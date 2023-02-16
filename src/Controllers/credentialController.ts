@@ -1,8 +1,8 @@
 import { Response } from "express";
-import { AuthenticatedRequest } from "@/Middlewares/authenticationMiddleware";
+import { AuthenticatedRequest } from "../Middlewares/authenticationMiddleware.js";
 import httpStatus from "http-status";
-import { Credential } from "@/protocols";
-import credentialService from "@/Services/credentialsService";
+import { Credential } from "../protocols.js";
+import credentialService from "../Services/credentialsService.js";
 import Cryptr from "cryptr";
 
 export async function inserCredentialDb(req: AuthenticatedRequest, res: Response) {

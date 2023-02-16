@@ -1,7 +1,7 @@
-import { invalidCredential } from "@/errors/invalidCredentialTitle";
-import { invalidGetCredential } from "@/errors/invalidGetCredential";
-import { Credential } from "@/protocols";
-import credentialRepository from "@/Repositories/credentialsRepository";
+import { invalidCredential } from "../errors/invalidCredentialTitle.js";
+import { invalidGetCredential } from "../errors/invalidGetCredential.js";
+import { Credential } from "../protocols.js";
+import credentialRepository from "../Repositories/credentialsRepository.js";
 
 
 async function insertCredential(credential:Credential, userId: number) {

@@ -4,6 +4,7 @@ export type ApplicationError = {
   };
 
 export type SignUp = {
+    id?: string;
     email: string;
     password: string;
 }
