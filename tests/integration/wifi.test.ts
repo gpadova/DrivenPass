@@ -4,36 +4,35 @@ import httpStatus from "http-status";
 import supertest from "supertest";
 import { generateUser } from "../factories/usersFactories";
 import { cleanDb, generateValidToken } from "../helpers";
+import { generateWifi } from "../factories/wifiFactories";
 
-import { generateValidCredential } from "../factories/credentialsFactories";
 
 beforeEach(async () => {
-  await cleanDb();
-});
-
+    await cleanDb();
+  });
+  
 afterAll(async () => {
   await new Promise<void>((resolve) => setTimeout(() => resolve(), 10000)); // avoid jest open handle error
 });
-
+  
 const server = supertest(app);
 
-describe("POST /credential route", () => {
+describe("POST /wifi testing", () => {
     jest.setTimeout(30000);
     it("No token is provided, response -> 401", async () => {
-        const response = await server.post("/credential")
+        const response = await server.post("/wifi")
         expect(response.status).toBe(httpStatus.UNAUTHORIZED)
     });
     it("Wrong token is provided, response -> 401", async () => {
         const token = "XXXXXXX"
-        const response = await server.post("/credential").set("Authorization", `Bearer ${token}`);
+        const response = await server.post("/wifi").set("Authorization", `Bearer ${token}`);
         expect(response.status).toBe(httpStatus.UNAUTHORIZED)
     });
     describe("Valid token is passed", () => {
-        const generateCredential = () => ({
+        const generateWifiBody = () => ({
             title:faker.name.firstName(),
-            url: faker.internet.url(),
-            username: faker.internet.userName(),
-            password: faker.internet.url(),
+            network: faker.internet.url(),
+            password: faker.internet.url()
           });
           const generateValidBody = () => ({
             email: faker.internet.email(),
@@ -42,53 +41,53 @@ describe("POST /credential route", () => {
         it("Valid token is passed, but no body, response -> 401", async () => {
             const user = await generateValidBody()
             const token = await generateValidToken(user)
-            const response = await server.post("/credential").set("Authorization", `Bearer ${token}`);
+            const response = await server.post("/wifi").set("Authorization", `Bearer ${token}`);
             expect(response.status).toBe(httpStatus.UNAUTHORIZED)
         });
-        it("Valid token is passed, but no wrong body format, response 403", async () => {
-            const user = await generateValidBody()
+        
+        it("Wrong body format", async () => {
+            const user = generateValidBody()
             const body = {
-                tle:faker.name.firstName(),
-                url: faker.internet.url(),
-                username: faker.internet.userName(),
-                password: faker.internet.url(),
+                tie:faker.name.firstName(),
+                network: faker.internet.url(),
+                password: faker.internet.url()
               }
             const token = await generateValidToken(user)
-            const response = await server.post("/credential").set("Authorization", `Bearer ${token}`).send(body);
+            const response = await server.post("/wifi").set("Authorization", `Bearer ${token}`).send(body);
             expect(response.status).toBe(httpStatus.UNAUTHORIZED)
         });
+
         it("Valid token is passed and body, response -> 201", async () => {
             const userBody = generateValidBody()
             const user = await generateUser(userBody)
-            const body = generateCredential();
+            const body = generateWifiBody();
             const token = await generateValidToken({id: String(user.id),email: user.email, password: user.password})
             
-            const response = await server.post("/credential").set("Authorization", `Bearer ${token}`).send(body);
+            const response = await server.post("/wifi").set("Authorization", `Bearer ${token}`).send(body);
             expect(response.status).toBe(httpStatus.CREATED)
         });
+        
     });
 });
 
-describe("GET /credentials testing", () => {
+describe("GET /wifi testing", () => {
     jest.setTimeout(30000);
-    const generateCredential = () => ({
+    const generateWifiBody = () => ({
         title:faker.name.firstName(),
-        url: faker.internet.url(),
-        username: faker.internet.userName(),
-        password: faker.internet.url(),
+        network: faker.internet.url(),
+        password: faker.internet.url()
       });
       const generateValidBody = () => ({
-        id: faker.random.numeric(),
         email: faker.internet.email(),
         password: faker.internet.password(10),
       });
     it("No token is provided, response -> 401", async () => {
-        const response = await server.get("/credential")
+        const response = await server.get("/wifi")
         expect(response.status).toBe(httpStatus.UNAUTHORIZED)
     });
     it("Wrong token is provided, response -> 401", async () => {
         const token = "XXXXXXX"
-        const response = await server.get("/credential").set("Authorization", `Bearer ${token}`);
+        const response = await server.get("/wifi").set("Authorization", `Bearer ${token}`);
         expect(response.status).toBe(httpStatus.UNAUTHORIZED)
     });
     describe("Right token is passed", () => {
@@ -97,7 +96,7 @@ describe("GET /credentials testing", () => {
             const user = await generateUser(userBody)
             const token = await generateValidToken({id: String(user.id),email: user.email, password: user.password})
 
-            const response = await server.get("/credential").set("Authorization", `Bearer ${token}`);
+            const response = await server.get("/wifi").set("Authorization", `Bearer ${token}`);
             expect(response.status).toBe(httpStatus.OK)
             expect(response.body).toHaveLength(0);
         });
@@ -105,49 +104,45 @@ describe("GET /credentials testing", () => {
             const userBody = generateValidBody()
             const user = await generateUser(userBody)
             const token = await generateValidToken({id: String(user.id),email: user.email, password: user.password})
-            const body = await generateCredential();
-            await generateValidCredential(Number(user.id))
-            const response = await server.get("/credential").set("Authorization", `Bearer ${token}`);
+            await generateWifi(user.id)
+            const response = await server.get("/wifi").set("Authorization", `Bearer ${token}`);
 
             expect(response.status).toBe(httpStatus.OK)
             expect(response.body).toEqual(
                 expect.arrayContaining([
                     expect.objectContaining({
                         title: expect.any(String),
-                        url: expect.any(String),
-                        username: expect.any(String),
+                        network: expect.any(String),
                         password: expect.any(String)
                 })
             ]))
         });
-    });
+    });      
 });
 
-describe("GET /credential/:id testing", () => {
+describe("GET /wifi/:id testing", () => {
     jest.setTimeout(30000);
-    const generateCredential = () => ({
+    const generateWifiBody = () => ({
         title:faker.name.firstName(),
-        url: faker.internet.url(),
-        username: faker.internet.userName(),
-        password: faker.internet.url(),
+        network: faker.internet.url(),
+        password: faker.internet.url()
       });
-      const generateValidBody = () => ({
-        id: faker.random.numeric(),
+    const generateValidBody = () => ({
         email: faker.internet.email(),
         password: faker.internet.password(10),
-      });
+    });
     it("No token is provided, response -> 401", async () => {
-        const response = await server.get("/credential/1")
+        const response = await server.get("/wifi/1")
         expect(response.status).toBe(httpStatus.UNAUTHORIZED)
     });
     it("Wrong token is provided, response -> 401", async () => {
         const token = "XXXXXXX"
-        const response = await server.get("/credential/1").set("Authorization", `Bearer ${token}`);
+        const response = await server.get("/wifi/1").set("Authorization", `Bearer ${token}`);
         expect(response.status).toBe(httpStatus.UNAUTHORIZED)
     });
     describe("Right token is provided", () => {
         it("There's no such id in the db for this credential", async () => {
-            const body = await generateCredential();
+
             const userBody = generateValidBody()
             const user = await generateUser(userBody)
             const token = await generateValidToken({id: String(user.id),email: user.email, password: user.password})                
@@ -156,68 +151,65 @@ describe("GET /credential/:id testing", () => {
             const response = await server.get(`/credential/${randoNumber}`).set("Authorization", `Bearer ${token}`);
             expect(response.status).toBe(httpStatus.FORBIDDEN)
         });
-        it("Succesfull request made", async () => {
-            const body = await generateCredential();
-            const userBody = generateValidBody()
-            const user = await generateUser(userBody)
-            const token = await generateValidToken({id: String(user.id),email: user.email, password: user.password})
-            const credential = await generateValidCredential(Number(user.id))
-            const response = await server.get(`/credential/${credential.id}`).set("Authorization", `Bearer ${token}`);
-
-            expect(response.status).toBe(httpStatus.OK)
-            expect(response.body).toEqual(
-                expect.objectContaining({
-                        id: expect.any(Number),
-                        title: expect.any(String),
-                        url: expect.any(String),
-                        username: expect.any(String),
-                        password: expect.any(String),
-                        userId: expect.any(Number)
-                }))
-        });
     });
+
+    it("Credential were previosly inserted to this user", async () => {
+        const userBody = generateValidBody()
+        const user = await generateUser(userBody)
+        const token = await generateValidToken({id: String(user.id),email: user.email, password: user.password})
+        const wifi = await generateWifi(user.id)
+        const response = await server.get(`/wifi/${wifi.id}`).set("Authorization", `Bearer ${token}`);
+
+        expect(response.status).toBe(httpStatus.OK)
+        expect(response.body).toEqual(
+                expect.objectContaining({
+                    title: expect.any(String),
+                    network: expect.any(String),
+                    password: expect.any(String)
+            })
+        )
+    });
+    
 });
 
-describe("DELETE /credential/:id testing", () => {
+describe("DELETE /wifi/:id testing ", () => {
     jest.setTimeout(30000);
-    const generateCredential = () => ({
+    const generateWifiBody = () => ({
         title:faker.name.firstName(),
-        url: faker.internet.url(),
-        username: faker.internet.userName(),
-        password: faker.internet.url(),
+        network: faker.internet.url(),
+        password: faker.internet.url()
       });
-      const generateValidBody = () => ({
-        id: faker.random.numeric(),
+    const generateValidBody = () => ({
         email: faker.internet.email(),
         password: faker.internet.password(10),
-      });
+    });
     it("No token is provided, response -> 401", async () => {
-        const response = await server.delete("/credential/1")
+        const response = await server.delete("/wifi/1")
         expect(response.status).toBe(httpStatus.UNAUTHORIZED)
     });
     it("Wrong token is provided, response -> 401", async () => {
         const token = "XXXXXXX"
-        const response = await server.delete("/credential/1").set("Authorization", `Bearer ${token}`);
+        const response = await server.delete("/wifi/1").set("Authorization", `Bearer ${token}`);
         expect(response.status).toBe(httpStatus.UNAUTHORIZED)
     });
     describe("Valid token is passed", () => {
-        it("Not a valid id passed", async () => {
-            const user = generateValidBody()
-            const body = generateCredential();
-            const token = await generateValidToken(user)
-            const randoNumber = faker.random.numeric(3)
-            const response = await server.delete(`/credential/${randoNumber}`).set("Authorization", `Bearer ${token}`);
-            expect(response.status).toBe(httpStatus.FORBIDDEN)
-        });
-        it("Valid id is passed", async () => {
-            const body = await generateCredential();
-            const userBody = generateValidBody()
-            const user = await generateUser(userBody)
-            const token = await generateValidToken({id: String(user.id),email: user.email, password: user.password})
-            const credential = await generateValidCredential(Number(user.id))
+       it("Invalid id sent", async () => {
+        const userBody = generateValidBody()
+        const user = await generateUser(userBody)
+        const token = await generateValidToken({id: String(user.id),email: user.email, password: user.password})                
 
-            const response = await server.delete(`/credential/${credential.id}`).set("Authorization", `Bearer ${token}`);
-            expect(response.status).toBe(httpStatus.ACCEPTED)
-        });
+        const randoNumber = faker.random.numeric()
+        const response = await server.delete(`/credential/${randoNumber}`).set("Authorization", `Bearer ${token}`);
+        expect(response.status).toBe(httpStatus.FORBIDDEN)
+       });
+       it("Valid id is sent", async () => {
+        const userBody = generateValidBody()
+        const user = await generateUser(userBody)
+        const token = await generateValidToken({id: String(user.id),email: user.email, password: user.password})
+        const wifi = await generateWifi(user.id)
+        const response = await server.delete(`/wifi/${wifi.id}`).set("Authorization", `Bearer ${token}`);
+
+        expect(response.status).toBe(httpStatus.ACCEPTED)
+       }); 
     });
 });

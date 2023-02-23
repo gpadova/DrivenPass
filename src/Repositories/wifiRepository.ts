@@ -1,10 +1,11 @@
 import { prisma } from "../Config/database";
 import { Wifi } from "../protocols";
-import Cryptr from "cryptr";
+import { cryptr } from "@/server";
 
 async function insertWifiQuery(wifi: Wifi, userId: number) {
-    const cryptr = new Cryptr("myTotallySecretKey");
+
     const encryptedString = cryptr.encrypt(wifi.password);
+
     return prisma.network.create({
         data: {
             network: wifi.network,
