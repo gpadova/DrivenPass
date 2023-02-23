@@ -1,11 +1,11 @@
-import { prisma } from "../Config/database.js";
-import { SignUp } from "../protocols.js";
+import { prisma } from "../Config/database";
+import { SignUp } from "../protocols";
 import bcrypt from "bcrypt"
 
-async function verifyEmail(user:SignUp) {
-    return await prisma.user.findFirst({
+async function verifyEmail(users:SignUp) {
+    return prisma.user.findFirst({
         where: {
-            email: user.email
+            email: users.email
         }
     })
 }

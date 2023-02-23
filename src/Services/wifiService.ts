@@ -1,7 +1,6 @@
-import { Wifi } from "../protocols.js";
-import Cryptr from "cryptr";
-import wifiRepository from "../Repositories/wifiRepository.js";
-import { invalidGetWifi } from "../errors/invalidGetWifi.js";
+import { Wifi } from "../protocols";
+import wifiRepository from "../Repositories/wifiRepository";
+import { invalidGetWifi } from "../errors/invalidGetWifi";
 
 
 async function insertWifi(wifi:Wifi, userId: number) {
@@ -26,7 +25,6 @@ async function deleteWifiService(userId:number, id: string) {
     const deletedWifi = await wifiRepository.deletedWifiQuery(userId, id)
 
     if(!deletedWifi) throw invalidGetWifi();
-
     return deletedWifi
 }
 

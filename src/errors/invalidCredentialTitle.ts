@@ -1,4 +1,4 @@
-import { ApplicationError } from "../protocols.js";
+import { ApplicationError } from "../protocols";
 
 export function invalidCredential(): ApplicationError {
   return {

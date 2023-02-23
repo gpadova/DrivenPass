@@ -1,20 +1,19 @@
-import { authenticateToken } from "../Middlewares/authenticationMiddleware.js";
-import { validateBody } from "../Middlewares/validationMiddleware.js";
+import { authenticateToken } from "../Middlewares/authenticationMiddleware";
+import { validateBody } from "../Middlewares/validationMiddleware";
 import { Router } from "express";
-import { WifiSchema } from "../Schemas/wifiSchema.js";
+import { WifiSchema } from "../Schemas/wifiSchema";
 import {
   inserWifiDb,
   getSpecificWifi,
   getWifi,
   deleteWifi
-} from "../Controllers/wifiController.js";
+} from "../Controllers/wifiController";
 
 const wifiRouter = Router();
 
-wifiRouter.all("/*", authenticateToken);
-wifiRouter.post("/wifi", validateBody(WifiSchema), inserWifiDb);
-wifiRouter.get("/wifi/:id", getSpecificWifi);
-wifiRouter.get("/wifi", getWifi);
-wifiRouter.delete("/wifi/:id", deleteWifi)
+wifiRouter.post("/wifi",authenticateToken, validateBody(WifiSchema), inserWifiDb);
+wifiRouter.get("/wifi/:id",authenticateToken, getSpecificWifi);
+wifiRouter.get("/wifi",authenticateToken, getWifi);
+wifiRouter.delete("/wifi/:id",authenticateToken, deleteWifi)
 
 export default wifiRouter;

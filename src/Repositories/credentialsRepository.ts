@@ -1,6 +1,6 @@
-import { prisma } from "../Config/database.js";
-import { Credential } from "../protocols.js";
-import Cryptr from "cryptr";
+import { prisma } from "../Config/database";
+import { Credential } from "../protocols";
+import { cryptr } from "../server";
 
 async function verifyExistingNameQuery(credential: Credential, userId: number) {
   return prisma.credential.findFirst({
@@ -12,7 +12,7 @@ async function verifyExistingNameQuery(credential: Credential, userId: number) {
 }
 
 async function insertCredentialQuery(credential: Credential, userId: number) {
-  const cryptr = new Cryptr("myTotallySecretKey");
+  
   const encryptedString = cryptr.encrypt(credential.password);
 
   return prisma.credential.create({
@@ -46,8 +46,12 @@ async function getCredentialQuery(userId: number) {
 async function deleteCredential(userId: number, id: string) {
   return prisma.credential.deleteMany({
     where: {
-      userId,
-      id: Number(id),
+      id: {
+        equals : Number(id)
+      },
+      userId: {
+        equals: userId
+      }
     },
   });
 }
