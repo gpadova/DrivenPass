@@ -53,7 +53,7 @@ describe("POST /signin", () => {
         ...body,
         password: faker.lorem.word(),
       });
-      expect(response.status).toBe(httpStatus.BAD_REQUEST);
+      expect(response.status).toBe(httpStatus.UNAUTHORIZED);
     });
 
     it("should respond with status 200", async () => {
@@ -110,6 +110,6 @@ describe("POST /signup", () => {
     const body = await generateValidBody()
     const user = await generateUser(body);
     const response = await server.post("/signup").send(user)
-    expect(response.status).toBe(httpStatus.CONFLICT)
+    expect(response.status).toBe(httpStatus.BAD_REQUEST)
   });
 });
