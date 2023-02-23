@@ -11,6 +11,6 @@ export async function cleanDb() {
 
 export async function generateValidToken(user: SignUp) {
 
-    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET);
+    const token = await jwt.sign({ userId: Number(user.id) }, process.env.JWT_SECRET);
     return token;
 }

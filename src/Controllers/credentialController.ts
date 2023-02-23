@@ -3,7 +3,7 @@ import { AuthenticatedRequest } from "../Middlewares/authenticationMiddleware";
 import httpStatus from "http-status";
 import { Credential } from "../protocols";
 import credentialService from "../Services/credentialsService";
-import Cryptr from "cryptr";
+import { cryptr } from "../server";
 
 export async function inserCredentialDb(req: AuthenticatedRequest, res: Response) {
     const { userId } = req
@@ -20,7 +20,7 @@ export async function inserCredentialDb(req: AuthenticatedRequest, res: Response
 export async function getSpecificCredential(req: AuthenticatedRequest, res: Response) {
     const id = req.params.id;
     const { userId } = req
-    const cryptr = new Cryptr('myTotallySecretKey')
+    
     try {
         const credential = await credentialService.getSpecificCredentialService(id, userId)
         const decryptedString = cryptr.decrypt(credential.password);
@@ -33,7 +33,6 @@ export async function getSpecificCredential(req: AuthenticatedRequest, res: Resp
 
 export async function getCredentials(req: AuthenticatedRequest, res: Response) {
     const { userId } = req
-    const cryptr = new Cryptr('myTotallySecretKey')
     try {
         const credential = await credentialService.getCredentials(userId)
         const obj = []
