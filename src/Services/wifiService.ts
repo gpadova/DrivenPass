@@ -10,13 +10,12 @@ async function insertWifi(wifi:Wifi, userId: number) {
 async function getSpecificWifi(userId: number, id: string) {
     const wifi = await wifiRepository.getSpecificWifiQuery(userId, id);
     if(!wifi) throw invalidGetWifi();
-
     return wifi
 }
 
 async function getWifi(userId: number) {
     const wifi = await wifiRepository.getWifiQuery(userId)
-    if(!wifi) throw invalidGetWifi();
+    if(wifi.length === 0) throw invalidGetWifi();
 
     return wifi
 }
@@ -24,7 +23,7 @@ async function getWifi(userId: number) {
 async function deleteWifiService(userId:number, id: string) {
     const deletedWifi = await wifiRepository.deletedWifiQuery(userId, id)
 
-    if(!deletedWifi) throw invalidGetWifi();
+    if(deletedWifi.count === 0) throw invalidGetWifi();
     return deletedWifi
 }
 

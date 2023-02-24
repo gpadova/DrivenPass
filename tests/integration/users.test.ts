@@ -34,15 +34,15 @@ describe("POST /signin", () => {
   describe("when body is valid", () => {
     const generateValidBody = () => ({
       email: faker.internet.email(),
-      password: faker.internet.password(8),
+      password: faker.internet.password(),
     });
 
     it("should respond with status 400 if there is no user for given email", async () => {
-      const body = { email: faker.internet.email() };
+      const body = generateValidBody();
 
       const response = await server.post("/signin").send(body);
 
-      expect(response.status).toBe(httpStatus.BAD_REQUEST);
+      expect(response.status).toBe(httpStatus.UNAUTHORIZED);
     });
 
     it("should respond with status 400 if there is a user for given email but password is not correct", async () => {
@@ -50,8 +50,8 @@ describe("POST /signin", () => {
       await generateUser(body);
 
       const response = await server.post("/signin").send({
-        ...body,
-        password: faker.lorem.word(),
+        email: body.email,
+        password: faker.internet.password()
       });
       expect(response.status).toBe(httpStatus.UNAUTHORIZED);
     });
@@ -107,9 +107,9 @@ describe("POST /signup", () => {
   });
 
   it("POST with an user already created with this email", async () => {
-    const body = await generateValidBody()
+    const body = generateValidBody()
     const user = await generateUser(body);
-    const response = await server.post("/signup").send(user)
-    expect(response.status).toBe(httpStatus.BAD_REQUEST)
+    const response = await server.post("/signup").send(body)
+    expect(response.status).toBe(httpStatus.CONFLICT)
   });
 });

@@ -66,6 +66,15 @@ describe("POST /credential route", () => {
             const response = await server.post("/credential").set("Authorization", `Bearer ${token}`).send(body);
             expect(response.status).toBe(httpStatus.CREATED)
         });
+        it("Credential with the same name", async () => {
+            const userBody = generateValidBody()
+            const user = await generateUser(userBody)
+            const credential = await generateValidCredential(user.id)
+            
+            const token = await generateValidToken({id: String(user.id),email: user.email, password: userBody.password})
+            const response = await server.post("/credential").set("Authorization", `Bearer ${token}`).send({title: credential.title, url: credential.url, username: credential.username, password: credential.password});
+            expect(response.status).toBe(httpStatus.FORBIDDEN)
+        });
     });
 });
 
@@ -98,8 +107,7 @@ describe("GET /credentials testing", () => {
             const token = await generateValidToken({id: String(user.id),email: user.email, password: user.password})
 
             const response = await server.get("/credential").set("Authorization", `Bearer ${token}`);
-            expect(response.status).toBe(httpStatus.OK)
-            expect(response.body).toHaveLength(0);
+            expect(response.status).toBe(httpStatus.NOT_FOUND)
         });
         it("Credential were previosly inserted to this user", async () => {
             const userBody = generateValidBody()

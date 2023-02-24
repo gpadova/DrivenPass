@@ -1,6 +1,6 @@
 import { prisma } from "../Config/database";
 import { Wifi } from "../protocols";
-import { cryptr } from "@/server";
+import { cryptr } from "../server";
 
 async function insertWifiQuery(wifi: Wifi, userId: number) {
 

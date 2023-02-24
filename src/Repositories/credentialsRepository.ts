@@ -21,7 +21,7 @@ async function insertCredentialQuery(credential: Credential, userId: number) {
       title: credential.title,
       url: credential.url,
       username: credential.username,
-      userId,
+      userId
     },
   });
 }

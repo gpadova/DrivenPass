@@ -4,14 +4,14 @@
   "description": "",
   "main": "src/server.js",
   "scripts": {
-    "test": "NODE_ENV=test jest --passWithNoTests --runInBand --forceExit",
+    "test": "NODE_ENV=test jest --passWithNoTests --runInBand --forceExit --coverage",
     "dev": "NODE_ENV=test nodemon src/server.ts",
     "prisma:migrate:test": "doentv -e .env.test prisma migrate deploy",
     "test:test": "jest --runInBand --detectOpenHandles --forceExit",
     "test:watch": "jest --watch --passWithNoTests --runInBand -i",
-    "test:wifi": "npm run test tests/integration/wifi.test.ts",
-    "test:credential": "npm run test tests/integration/credentials.test.ts",
-    "test:users": "npm run test tests/integration/users.test.ts"
+    "test:wifi": "npm run test --coverage tests/integration/wifi.test.ts",
+    "test:credential": "npm run test --coverage tests/integration/credentials.test.ts",
+    "test:users": "npm run test --coverage tests/integration/users.test.ts"
   },
   "repository": {
     "type": "git",

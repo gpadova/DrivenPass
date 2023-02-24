@@ -50,7 +50,7 @@ export async function getCredentials(req: AuthenticatedRequest, res: Response) {
         return res.status(httpStatus.OK).send(obj)
     } catch (error) {
         console.log(error)
-        res.sendStatus(httpStatus.CONFLICT)
+        res.sendStatus(httpStatus.NOT_FOUND)
     }
 }
 

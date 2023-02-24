@@ -7,6 +7,7 @@ import credentialRepository from "../Repositories/credentialsRepository";
 async function insertCredential(credential:Credential, userId: number) {
 
     const existingName = await credentialRepository.verifyExistingNameQuery(credential, userId);
+ 
     if(existingName) throw invalidCredential();
 
     const cred = await credentialRepository.insertCredentialQuery(credential, userId);
@@ -23,7 +24,7 @@ async function getSpecificCredentialService(id: string, userId: number) {
 async function getCredentials(userId: number) {
     const credential = await credentialRepository.getCredentialQuery(userId)
 
-    if(!credential) throw invalidCredential();
+    if(credential.length === 0) throw invalidCredential();
 
     return credential
 }

@@ -72,11 +72,6 @@ describe("POST /wifi testing", () => {
 
 describe("GET /wifi testing", () => {
     jest.setTimeout(30000);
-    const generateWifiBody = () => ({
-        title:faker.name.firstName(),
-        network: faker.internet.url(),
-        password: faker.internet.url()
-      });
       const generateValidBody = () => ({
         email: faker.internet.email(),
         password: faker.internet.password(10),
@@ -97,8 +92,7 @@ describe("GET /wifi testing", () => {
             const token = await generateValidToken({id: String(user.id),email: user.email, password: user.password})
 
             const response = await server.get("/wifi").set("Authorization", `Bearer ${token}`);
-            expect(response.status).toBe(httpStatus.OK)
-            expect(response.body).toHaveLength(0);
+            expect(response.status).toBe(httpStatus.UNAUTHORIZED);
         });
         it("Credential were previosly inserted to this user", async () => {
             const userBody = generateValidBody()
@@ -122,11 +116,6 @@ describe("GET /wifi testing", () => {
 
 describe("GET /wifi/:id testing", () => {
     jest.setTimeout(30000);
-    const generateWifiBody = () => ({
-        title:faker.name.firstName(),
-        network: faker.internet.url(),
-        password: faker.internet.url()
-      });
     const generateValidBody = () => ({
         email: faker.internet.email(),
         password: faker.internet.password(10),
@@ -147,13 +136,13 @@ describe("GET /wifi/:id testing", () => {
             const user = await generateUser(userBody)
             const token = await generateValidToken({id: String(user.id),email: user.email, password: user.password})                
 
-            const randoNumber = faker.random.numeric()
-            const response = await server.get(`/credential/${randoNumber}`).set("Authorization", `Bearer ${token}`);
-            expect(response.status).toBe(httpStatus.FORBIDDEN)
+            const randoNumber = faker.random.numeric(3)
+            const response = await server.get(`/wifi/${randoNumber}`).set("Authorization", `Bearer ${token}`);
+            expect(response.status).toBe(httpStatus.UNAUTHORIZED)
         });
     });
 
-    it("Credential were previosly inserted to this user", async () => {
+    it("Successfull request, response -> 200", async () => {
         const userBody = generateValidBody()
         const user = await generateUser(userBody)
         const token = await generateValidToken({id: String(user.id),email: user.email, password: user.password})
@@ -174,11 +163,6 @@ describe("GET /wifi/:id testing", () => {
 
 describe("DELETE /wifi/:id testing ", () => {
     jest.setTimeout(30000);
-    const generateWifiBody = () => ({
-        title:faker.name.firstName(),
-        network: faker.internet.url(),
-        password: faker.internet.url()
-      });
     const generateValidBody = () => ({
         email: faker.internet.email(),
         password: faker.internet.password(10),
@@ -199,7 +183,7 @@ describe("DELETE /wifi/:id testing ", () => {
         const token = await generateValidToken({id: String(user.id),email: user.email, password: user.password})                
 
         const randoNumber = faker.random.numeric()
-        const response = await server.delete(`/credential/${randoNumber}`).set("Authorization", `Bearer ${token}`);
+        const response = await server.delete(`/wifi/${randoNumber}`).set("Authorization", `Bearer ${token}`);
         expect(response.status).toBe(httpStatus.FORBIDDEN)
        });
        it("Valid id is sent", async () => {
